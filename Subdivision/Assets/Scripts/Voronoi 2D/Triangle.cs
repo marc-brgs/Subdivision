@@ -17,7 +17,7 @@ namespace DelaunayVoronoi
             get
             {
                 var neighbors = new HashSet<Triangle>();
-                foreach (var vertex in Vertices)
+                foreach (Point vertex in Vertices)
                 {
                     var trianglesWithSharedEdge = vertex.AdjacentTriangles.Where(o =>
                     {
@@ -87,6 +87,7 @@ namespace DelaunayVoronoi
             return result > 0;
         }
 
+        // 2 points communs entre les 2 triangles
         public bool SharesEdgeWith(Triangle triangle)
         {
             var sharedVertices = Vertices.Where(o => triangle.Vertices.Contains(o)).Count();
@@ -95,7 +96,7 @@ namespace DelaunayVoronoi
 
         public bool IsPointInsideCircleCirconscrit(Point point)
         {
-            // sqrt(x² + y²)
+            // sqrt((b.x - a.x)² + (b.y - a.y)²)
             double distanceSquared = (point.X - CentreCirconscrit.X) * (point.X - CentreCirconscrit.X) +
                 (point.Y - CentreCirconscrit.Y) * (point.Y - CentreCirconscrit.Y);
             return distanceSquared < RadiusSquared;

@@ -417,13 +417,6 @@ public class GameManager : MonoBehaviour
 
     void GenerateVoronoiDiagram(TriangulationMethod method)
     {
-        int numberOfPoints = 100;
-        double maxX = 20;
-        double maxY = 20;
-
-
-        //var convertedPoints = ConvertGameObjectsToPoints(points);
-
         // Générer les points
         var delaunay = new DelaunayTriangulator();
         //var points = delaunay.GeneratePoints(numberOfPoints, maxX, maxY);

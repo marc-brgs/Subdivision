@@ -54,9 +54,10 @@ namespace DelaunayVoronoi
                 }
                 triangulation.RemoveWhere(o => badTriangles.Contains(o));
 
-                foreach (Edge edge in polygon.Where(possibleEdge => possibleEdge.Point1 != point && possibleEdge.Point2 != point))
+                // Pour chaque arête du polygone formé par les arêtes des mauvais triangles, 
+                // crée un nouveau triangle avec le point en cours de traitement
+                foreach (Edge edge in polygon)
                 {
-                    // Ajoute un nouveau triangle à la triangulation
                     Triangle triangle = new Triangle(point, edge.Point1, edge.Point2);
                     triangulation.Add(triangle);
                 }
@@ -69,23 +70,29 @@ namespace DelaunayVoronoi
 
         private List<Edge> FindHoleBoundaries(List<Triangle> badTriangles)
         {
-            var edges = new List<Edge>();
+            List<Edge> edges = new List<Edge>();
+
+            // Ajoute toutes les arêtes des mauvais triangles à la liste
             foreach (Triangle triangle in badTriangles)
             {
                 edges.Add(new Edge(triangle.Vertices[0], triangle.Vertices[1]));
                 edges.Add(new Edge(triangle.Vertices[1], triangle.Vertices[2]));
                 edges.Add(new Edge(triangle.Vertices[2], triangle.Vertices[0]));
             }
-            var grouped = edges.GroupBy(o => o);
+
+            // Sélectionne les arêtes qui n'ont qu'une seule occurrence dans le groupe.
+            // Ces arêtes sont celles qui ne sont partagées avec aucun autre des mauvais triangles.
             var boundaryEdges = edges.GroupBy(o => o).Where(o => o.Count() == 1).Select(o => o.First());
+
+            // Retourne la frontière du trou
             return boundaryEdges.ToList();
         }
 
         private Triangle GenerateSuperTriangle()
         {
-            // A
+            // C
             // | \
-            // B---C
+            // A---B
             double epsilon = 1; // Ne peut pas être à 0 sinon 3 points seront collinéaires
             Point A = new Point(MinX - epsilon, MinY - epsilon);
             Point B = new Point(MinX + 2*(MaxX - MinX) + 3 * epsilon, MinY - epsilon);
