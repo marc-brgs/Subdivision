@@ -234,6 +234,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0748bb84d8e7fba478f1260410aed70f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vertexPrefab: {fileID: 0}
+  edgePrefab: {fileID: 0}
+  facePrefab: {fileID: 0}
 --- !u!1 &1222989298
 GameObject:
   m_ObjectHideFlags: 0
@@ -429,6 +432,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0748bb84d8e7fba478f1260410aed70f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vertexPrefab: {fileID: 0}
+  edgePrefab: {fileID: 0}
+  facePrefab: {fileID: 0}
 --- !u!1 &1634503745
 GameObject:
   m_ObjectHideFlags: 0
@@ -448,7 +454,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &1634503746
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -539,6 +545,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0748bb84d8e7fba478f1260410aed70f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vertexPrefab: {fileID: 134592172681078714, guid: fec9b144bc0d984458bf1a427a9c601f, type: 3}
+  edgePrefab: {fileID: 134592172681078714, guid: 9cbc12cfc941a0d418178233ed79a2d8, type: 3}
+  facePrefab: {fileID: 134592172681078714, guid: 6e442d55055c61b4197792a8203786a4, type: 3}
 --- !u!1 &1962698281
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,7 +567,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &1962698282
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -649,6 +658,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0748bb84d8e7fba478f1260410aed70f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vertexPrefab: {fileID: 0}
+  edgePrefab: {fileID: 0}
+  facePrefab: {fileID: 0}
 --- !u!1 &2052951357
 GameObject:
   m_ObjectHideFlags: 0

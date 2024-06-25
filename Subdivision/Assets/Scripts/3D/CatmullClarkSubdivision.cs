@@ -6,6 +6,11 @@ public class CatmullClarkSubdivision : MonoBehaviour
 {
     private MeshFilter meshFilter;
 
+    public GameObject vertexPrefab;
+    public GameObject edgePrefab;
+    public GameObject facePrefab;
+    private List<GameObject> visualizationObjects = new List<GameObject>();
+
     void Start()
     {
         meshFilter = GetComponent<MeshFilter>();
@@ -45,6 +50,9 @@ public class CatmullClarkSubdivision : MonoBehaviour
         // Reconnecter les points pour former la nouvelle géométrie
         Mesh newMesh = RebuildMesh(vertices, edges, faces);
         meshFilter.mesh = newMesh;
+
+        // Afficher les points de visualisation
+        VisualizePoints(vertices, edges, faces);
     }
 
     void Initialize(Mesh mesh, List<Vertex> vertices, List<Edge> edges, List<Face> faces)
@@ -62,7 +70,6 @@ public class CatmullClarkSubdivision : MonoBehaviour
                 vertices.Add(new Vertex { position = position });
             }
         }
-        Debug.Log("Unique Vertices Count: " + vertices.Count);
 
         // Initialisation des faces et des arêtes
         int[] triangles = mesh.triangles;
@@ -81,8 +88,6 @@ public class CatmullClarkSubdivision : MonoBehaviour
             AddEdge(edges, edgeDict, face.vertices[1], face.vertices[2], faces.Count - 1);
             AddEdge(edges, edgeDict, face.vertices[2], face.vertices[0], faces.Count - 1);
         }
-        Debug.Log("Edges Count: " + edges.Count);
-        Debug.Log("Faces Count: " + faces.Count);
 
         // Mise à jour des arêtes pour lier les sommets et les faces
         foreach (Edge edge in edges)
@@ -104,75 +109,20 @@ public class CatmullClarkSubdivision : MonoBehaviour
     void AddEdge(List<Edge> edges, Dictionary<Edge, int> edgeDict, int v1, int v2, int faceIndex)
     {
         Edge edge = new Edge { v1 = Mathf.Min(v1, v2), v2 = Mathf.Max(v1, v2), face1 = faceIndex, face2 = -1 };
-
-        if (edgeDict.TryGetValue(edge, out int edgeIndex))
+        
+        if(!edgeDict.ContainsKey(edge))
         {
-            edges[edgeIndex].face2 = faceIndex;
-        }
-        else
-        {
+            // Define the first face
             edgeDict[edge] = edges.Count;
             edges.Add(edge);
         }
-    }
-
-    /*void Initialize(Mesh mesh, List<Vertex> vertices, List<Edge> edges, List<Face> faces)
-    {
-        // Initialisation des sommets
-        for (int i = 0; i < mesh.vertexCount; i++)
-        {
-            vertices.Add(new Vertex { position = mesh.vertices[i] });
-        }
-
-        // Initialisation des faces et des arêtes
-        int[] triangles = mesh.triangles;
-        Dictionary<Edge, int> edgeDict = new Dictionary<Edge, int>();
-
-        for (int i = 0; i < triangles.Length; i += 3)
-        {
-            Face face = new Face();
-            face.vertices.Add(triangles[i]);
-            face.vertices.Add(triangles[i + 1]);
-            face.vertices.Add(triangles[i + 2]);
-
-            faces.Add(face);
-
-            AddEdge(edges, edgeDict, triangles[i], triangles[i + 1], faces.Count - 1);
-            AddEdge(edges, edgeDict, triangles[i + 1], triangles[i + 2], faces.Count - 1);
-            AddEdge(edges, edgeDict, triangles[i + 2], triangles[i], faces.Count - 1);
-        }
-
-        // Mise à jour des arêtes pour lier les sommets et les faces
-        foreach (Edge edge in edges)
-        {
-            vertices[edge.v1].connectedEdges.Add(edges.IndexOf(edge));
-            vertices[edge.v1].connectedFaces.Add(edge.face1);
-
-            vertices[edge.v2].connectedEdges.Add(edges.IndexOf(edge));
-            vertices[edge.v2].connectedFaces.Add(edge.face1);
-
-            if (edge.face2 != -1)
-            {
-                vertices[edge.v1].connectedFaces.Add(edge.face2);
-                vertices[edge.v2].connectedFaces.Add(edge.face2);
-            }
-        }
-    }
-
-    void AddEdge(List<Edge> edges, Dictionary<Edge, int> edgeDict, int v1, int v2, int faceIndex)
-    {
-        Edge edge = new Edge { v1 = Mathf.Min(v1, v2), v2 = Mathf.Max(v1, v2), face1 = faceIndex, face2 = -1 };
-
-        if (edgeDict.TryGetValue(edge, out int edgeIndex))
-        {
-            edges[edgeIndex].face2 = faceIndex;
-        }
         else
         {
-            edgeDict[edge] = edges.Count;
-            edges.Add(edge);
+            // Define the other face
+            int edgeIndex = edgeDict[edge];
+            edges[edgeIndex].face2 = faceIndex;
         }
-    }*/
+    }
 
     // OK : centroid
     void ComputeFacePoints(List<Face> faces, List<Vertex> vertices)
@@ -256,6 +206,78 @@ public class CatmullClarkSubdivision : MonoBehaviour
 
         Dictionary<Vector3, int> vertexDict = new Dictionary<Vector3, int>();
 
+        // Ajouter les nouveaux sommets et enregistrer leurs indices
+        foreach (Vertex vertex in vertices)
+        {
+            if (!vertexDict.ContainsKey(vertex.position))
+            {
+                vertexDict[vertex.position] = newVertices.Count;
+                newVertices.Add(vertex.position);
+            }
+        }
+
+        // Ajouter les points de bord et enregistrer leurs indices
+        foreach (Edge edge in edges)
+        {
+            if (!vertexDict.ContainsKey(edge.edgePoint))
+            {
+                vertexDict[edge.edgePoint] = newVertices.Count;
+                newVertices.Add(edge.edgePoint);
+            }
+        }
+
+        // Ajouter les points de face et enregistrer leurs indices
+        foreach (Face face in faces)
+        {
+            if (!vertexDict.ContainsKey(face.facePoint))
+            {
+                vertexDict[face.facePoint] = newVertices.Count;
+                newVertices.Add(face.facePoint);
+            }
+        }
+
+        // Créer les nouveaux triangles
+        foreach (Face face in faces)
+        {
+            int facePointIndex = vertexDict[face.facePoint];
+
+            for (int i = 0; i < face.vertices.Count; i++)
+            {
+                int v1 = face.vertices[i];
+                int v2 = face.vertices[(i + 1) % face.vertices.Count];
+
+                // Trouver l'arête correspondante
+                Edge edge = edges.Find(e => (e.v1 == v1 && e.v2 == v2) || (e.v1 == v2 && e.v2 == v1));
+                int edgePointIndex = vertexDict[edge.edgePoint];
+
+                // Créer le triangle face point - edge point - vertex point
+                newTriangles.Add(vertexDict[vertices[v1].position]); // vertex point içi
+                newTriangles.Add(edgePointIndex);
+                newTriangles.Add(facePointIndex);
+
+                // Créer le triangle edge point - next vertex point - vertex point
+                //newTriangles.Add(edgePointIndex);
+                //newTriangles.Add(vertexDict[vertices[v2].position]);
+                //newTriangles.Add(vertexDict[vertices[v1].position]);
+            }
+        }
+
+        newMesh.vertices = newVertices.ToArray();
+        newMesh.triangles = newTriangles.ToArray();
+        newMesh.RecalculateNormals();
+
+        return newMesh;
+    }
+
+    /*Mesh RebuildMesh(List<Vertex> vertices, List<Edge> edges, List<Face> faces)
+    {
+        Mesh newMesh = new Mesh();
+
+        List<Vector3> newVertices = new List<Vector3>();
+        List<int> newTriangles = new List<int>();
+
+        Dictionary<Vector3, int> vertexDict = new Dictionary<Vector3, int>();
+
         foreach (Face face in faces)
         {
             List<int> faceVertices = new List<int>();
@@ -268,7 +290,7 @@ public class CatmullClarkSubdivision : MonoBehaviour
                     vertexDict[vertex.position] = newVertices.Count;
                     newVertices.Add(vertex.position);
                 }
-                faceVertices.Add(vertexDict[vertex.position]);
+                faceVertices.Add(vertexDict[vertex.position]); // Vertex
             }
 
             foreach (int edgeIndex in face.edges)
@@ -279,7 +301,7 @@ public class CatmullClarkSubdivision : MonoBehaviour
                     vertexDict[edge.edgePoint] = newVertices.Count;
                     newVertices.Add(edge.edgePoint);
                 }
-                faceVertices.Add(vertexDict[edge.edgePoint]);
+                faceVertices.Add(vertexDict[edge.edgePoint]); // Edge point
             }
 
             if (!vertexDict.ContainsKey(face.facePoint))
@@ -287,7 +309,7 @@ public class CatmullClarkSubdivision : MonoBehaviour
                 vertexDict[face.facePoint] = newVertices.Count;
                 newVertices.Add(face.facePoint);
             }
-            faceVertices.Add(vertexDict[face.facePoint]);
+            faceVertices.Add(vertexDict[face.facePoint]); // Face point
 
             newTriangles.Add(faceVertices[0]);
             newTriangles.Add(faceVertices[1]);
@@ -302,6 +324,37 @@ public class CatmullClarkSubdivision : MonoBehaviour
         newMesh.RecalculateNormals();
 
         return newMesh;
+    }*/
+
+    void VisualizePoints(List<Vertex> vertices, List<Edge> edges, List<Face> faces)
+    {
+        // Supprimer les objets de visualisation précédents
+        foreach (var obj in visualizationObjects)
+        {
+            Destroy(obj);
+        }
+        visualizationObjects.Clear();
+
+        // Afficher les vertex points
+        foreach (Vertex vertex in vertices)
+        {
+            GameObject obj = Instantiate(vertexPrefab, vertex.position, Quaternion.identity);
+            visualizationObjects.Add(obj);
+        }
+
+        // Afficher les edge points
+        foreach (Edge edge in edges)
+        {
+            GameObject obj = Instantiate(edgePrefab, edge.edgePoint, Quaternion.identity);
+            visualizationObjects.Add(obj);
+        }
+
+        // Afficher les face points
+        foreach (Face face in faces)
+        {
+            GameObject obj = Instantiate(facePrefab, face.facePoint, Quaternion.identity);
+            visualizationObjects.Add(obj);
+        }
     }
 }
 
@@ -317,6 +370,25 @@ public class Edge
     public int v1, v2; // Indices des sommets
     public int face1, face2; // Indices des faces
     public Vector3 edgePoint;
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        Edge other = (Edge)obj;
+        return (v1 == other.v1 && v2 == other.v2) || (v1 == other.v2 && v2 == other.v1);
+    }
+
+    public override int GetHashCode()
+    {
+        int hash = 17;
+        hash = hash * 31 + Mathf.Min(v1, v2).GetHashCode();
+        hash = hash * 31 + Mathf.Max(v1, v2).GetHashCode();
+        return hash;
+    }
 }
 
 public class Face
