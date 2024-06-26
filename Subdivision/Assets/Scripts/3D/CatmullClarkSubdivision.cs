@@ -10,6 +10,7 @@ public class CatmullClarkSubdivision : MonoBehaviour
     public GameObject edgePrefab;
     public GameObject facePrefab;
     private List<GameObject> visualizationObjects = new List<GameObject>();
+    private bool isVisualizing = false;
 
     void Start()
     {
@@ -26,7 +27,8 @@ public class CatmullClarkSubdivision : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.V))
         {
-            Subdivide(meshFilter.mesh, true);
+            //Subdivide(meshFilter.mesh, true);
+            ToggleVisualization();
         }
     }
 
@@ -38,9 +40,6 @@ public class CatmullClarkSubdivision : MonoBehaviour
 
         // Initialiser les listes de sommets, arêtes et faces à partir du mesh
         Initialize(mesh, vertices, edges, faces);
-        Debug.Log("Vertices count : "+ vertices.Count);
-        Debug.Log("Edges count : " + edges.Count);
-        Debug.Log("Faces count : " + faces.Count);
 
         // Calculer les points de face
         ComputeFacePoints(faces, vertices);
@@ -48,18 +47,15 @@ public class CatmullClarkSubdivision : MonoBehaviour
         // Calculer les points d'arête
         ComputeEdgePoints(edges, vertices, faces);
 
-        if (!visualizeOnly)
-        {
-            // Calculer les points de sommet
-            ComputeVertexPoints(vertices, edges, faces);
+        // Calculer les points de sommet
+        ComputeVertexPoints(vertices, edges, faces);
 
-            // Reconnecter les points pour former la nouvelle géométrie
-            Mesh newMesh = RebuildMesh(vertices, edges, faces);
-            meshFilter.mesh = newMesh;
-        }
+        // Reconnecter les points pour former la nouvelle géométrie
+        Mesh newMesh = RebuildMesh(vertices, edges, faces);
+        meshFilter.mesh = newMesh;
 
-        // Afficher les points de visualisation
-        //VisualizePoints(vertices, edges, faces);
+        Debug.Log("Vertices count : " + vertices.Count + ", Edges count :" + edges.Count + " , Faces count : " + faces.Count);
+        VisualizePoints(vertices, edges, faces);
     }
 
     void Initialize(Mesh mesh, List<Vertex> vertices, List<Edge> edges, List<Face> faces)
@@ -348,12 +344,7 @@ public class CatmullClarkSubdivision : MonoBehaviour
 
     void VisualizePoints(List<Vertex> vertices, List<Edge> edges, List<Face> faces)
     {
-        // Supprimer les objets de visualisation précédents
-        foreach (var obj in visualizationObjects)
-        {
-            Destroy(obj);
-        }
-        visualizationObjects.Clear();
+        ClearVisualization();
 
         // Afficher les vertex points
         foreach (Vertex vertex in vertices)
@@ -368,12 +359,24 @@ public class CatmullClarkSubdivision : MonoBehaviour
             GameObject obj = Instantiate(edgePrefab, edge.edgePoint, Quaternion.identity);
             visualizationObjects.Add(obj);
         }
+    }
 
-        // Afficher les face points
-        foreach (Face face in faces)
+    void ClearVisualization()
+    {
+        // Supprimer les objets de visualisation précédents
+        foreach (var obj in visualizationObjects)
         {
-            GameObject obj = Instantiate(facePrefab, face.facePoint, Quaternion.identity);
-            visualizationObjects.Add(obj);
+            Destroy(obj);
+        }
+        visualizationObjects.Clear();
+    }
+
+    void ToggleVisualization()
+    {
+        // Supprimer les objets de visualisation précédents
+        foreach (var obj in visualizationObjects)
+        {
+            obj.SetActive(!obj.activeSelf);
         }
     }
 }
