@@ -6,14 +6,19 @@ namespace DelaunayVoronoi
 {
     public class Point
     {
-        public double X { get; }
-        public double Y { get; }
+        public float X { get; }
+        public float Y { get; }
         public HashSet<Triangle> AdjacentTriangles { get; } = new HashSet<Triangle>();
 
-        public Point(double x, double y)
+        public Point(float x, float y)
         {
             X = x;
             Y = y;
+        }
+
+        public Vector3 GetVector()
+        {
+            return new Vector3(X, Y, 0);
         }
     }
 }

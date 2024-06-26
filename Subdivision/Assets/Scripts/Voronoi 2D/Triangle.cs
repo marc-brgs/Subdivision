@@ -34,7 +34,7 @@ namespace DelaunayVoronoi
         {
             if (point1 == point2 || point1 == point3 || point2 == point3)
             {
-                throw new ArgumentException("Création d'un triangle avec 3 points non distincts");
+                throw new ArgumentException("CrÃ©ation d'un triangle avec 3 points non distincts");
             }
 
             if (!IsCounterClockwise(point1, point2, point3))
@@ -72,10 +72,10 @@ namespace DelaunayVoronoi
 
             if (div == 0)
             {
-                throw new DivideByZeroException(); // Points collinéaires
+                throw new DivideByZeroException(); // Points collinÃ©aires
             }
 
-            Point center = new Point(aux1 / div, aux2 / div);
+            Point center = new Point((float)(aux1 / div), (float)(aux2 / div));
             CentreCirconscrit = center;
             RadiusSquared = (center.X - p0.X) * (center.X - p0.X) + (center.Y - p0.Y) * (center.Y - p0.Y);
         }
@@ -96,7 +96,7 @@ namespace DelaunayVoronoi
 
         public bool IsPointInsideCircleCirconscrit(Point point)
         {
-            // sqrt((b.x - a.x)² + (b.y - a.y)²)
+            // sqrt((b.x - a.x)Â² + (b.y - a.y)Â²)
             double distanceSquared = (point.X - CentreCirconscrit.X) * (point.X - CentreCirconscrit.X) +
                 (point.Y - CentreCirconscrit.Y) * (point.Y - CentreCirconscrit.Y);
             return distanceSquared < RadiusSquared;

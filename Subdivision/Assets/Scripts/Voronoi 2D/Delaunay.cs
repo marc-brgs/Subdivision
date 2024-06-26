@@ -16,7 +16,7 @@ namespace DelaunayVoronoi
         // Init points, MaxX, MaxY, MinX, MinY
         public IEnumerable<Point> ConvertAndInitialize(List<GameObject> gameObjects)
         {
-            // Coordonnées du rectangle englobant
+            // CoordonnÃ©es du rectangle englobant
             MaxX = gameObjects.Max(go => go.transform.position.x);
             MaxY = gameObjects.Max(go => go.transform.position.y);
             MinX = gameObjects.Min(go => go.transform.position.x);
@@ -40,7 +40,7 @@ namespace DelaunayVoronoi
 
             foreach (Point point in points)
             {
-                // Trouve les triangles dont le cercle circonscrit contient le point (ne vérifie pas le critère de Delaunay)
+                // Trouve les triangles dont le cercle circonscrit contient le point (ne vÃ©rifie pas le critÃ¨re de Delaunay)
                 List<Triangle> badTriangles = FindBadTriangles(point, triangulation);
                 List<Edge> polygon = FindHoleBoundaries(badTriangles);
 
@@ -54,8 +54,8 @@ namespace DelaunayVoronoi
                 }
                 triangulation.RemoveWhere(o => badTriangles.Contains(o));
 
-                // Pour chaque arête du polygone formé par les arêtes des mauvais triangles, 
-                // crée un nouveau triangle avec le point en cours de traitement
+                // Pour chaque arÃªte du polygone formÃ© par les arÃªtes des mauvais triangles, 
+                // crÃ©e un nouveau triangle avec le point en cours de traitement
                 foreach (Edge edge in polygon)
                 {
                     Triangle triangle = new Triangle(point, edge.Point1, edge.Point2);
@@ -63,7 +63,7 @@ namespace DelaunayVoronoi
                 }
             }
 
-            // Supprime les triangles ayant au moins une arête en commun avec le super-triangle
+            // Supprime les triangles ayant au moins une arÃªte en commun avec le super-triangle
             triangulation.RemoveWhere(o => o.Vertices.Any(v => superTriangle.Vertices.Contains(v)));
             return triangulation;
         }
@@ -72,7 +72,7 @@ namespace DelaunayVoronoi
         {
             List<Edge> edges = new List<Edge>();
 
-            // Ajoute toutes les arêtes des mauvais triangles à la liste
+            // Ajoute toutes les arÃªtes des mauvais triangles Ã  la liste
             foreach (Triangle triangle in badTriangles)
             {
                 edges.Add(new Edge(triangle.Vertices[0], triangle.Vertices[1]));
@@ -80,11 +80,11 @@ namespace DelaunayVoronoi
                 edges.Add(new Edge(triangle.Vertices[2], triangle.Vertices[0]));
             }
 
-            // Sélectionne les arêtes qui n'ont qu'une seule occurrence dans le groupe.
-            // Ces arêtes sont celles qui ne sont partagées avec aucun autre des mauvais triangles.
+            // SÃ©lectionne les arÃªtes qui n'ont qu'une seule occurrence dans le groupe.
+            // Ces arÃªtes sont celles qui ne sont partagÃ©es avec aucun autre des mauvais triangles.
             var boundaryEdges = edges.GroupBy(o => o).Where(o => o.Count() == 1).Select(o => o.First());
 
-            // Retourne la frontière du trou
+            // Retourne la frontiÃ¨re du trou
             return boundaryEdges.ToList();
         }
 
@@ -93,10 +93,10 @@ namespace DelaunayVoronoi
             // C
             // | \
             // A---B
-            double epsilon = 1; // Ne peut pas être à 0 sinon 3 points seront collinéaires
-            Point A = new Point(MinX - epsilon, MinY - epsilon);
-            Point B = new Point(MinX + 2*(MaxX - MinX) + 3 * epsilon, MinY - epsilon);
-            Point C = new Point(MinX - epsilon, MinY + 2 * (MaxY - MinY) + 3 * epsilon);
+            double epsilon = 1; // Ne peut pas Ãªtre Ã  0 sinon 3 points seront collinÃ©aires
+            Point A = new Point((float)(MinX - epsilon), (float)(MinY - epsilon));
+            Point B = new Point((float)(MinX + 2*(MaxX - MinX) + 3 * epsilon), (float)(MinY - epsilon));
+            Point C = new Point((float)(MinX - epsilon), (float)(MinY + 2 * (MaxY - MinY) + 3 * epsilon));
             return new Triangle(A, B, C);
         }
 
