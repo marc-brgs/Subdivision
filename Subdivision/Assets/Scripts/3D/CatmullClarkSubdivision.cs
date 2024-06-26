@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CatmullUtils;
 
 public class CatmullClarkSubdivision : MonoBehaviour
 {
@@ -15,24 +16,22 @@ public class CatmullClarkSubdivision : MonoBehaviour
     void Start()
     {
         meshFilter = GetComponent<MeshFilter>();
+        DebugStructure(meshFilter.mesh);
     }
 
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.S))
         {
-            Debug.Log("Subdivide");
-            
             Subdivide(meshFilter.mesh);
         }
         if(Input.GetKeyDown(KeyCode.V))
         {
-            //Subdivide(meshFilter.mesh, true);
             ToggleVisualization();
         }
     }
 
-    void Subdivide(Mesh mesh, bool visualizeOnly=false)
+    void Subdivide(Mesh mesh, bool visualizeOnly = false)
     {
         List<Vertex> vertices = new List<Vertex>();
         List<Edge> edges = new List<Edge>();
@@ -54,7 +53,7 @@ public class CatmullClarkSubdivision : MonoBehaviour
         Mesh newMesh = RebuildMesh(vertices, edges, faces);
         meshFilter.mesh = newMesh;
 
-        Debug.Log("Vertices count : " + vertices.Count + ", Edges count :" + edges.Count + " , Faces count : " + faces.Count);
+        DebugStructure(newMesh);
         VisualizePoints(vertices, edges, faces);
     }
 
@@ -359,6 +358,13 @@ public class CatmullClarkSubdivision : MonoBehaviour
             GameObject obj = Instantiate(edgePrefab, edge.edgePoint, Quaternion.identity);
             visualizationObjects.Add(obj);
         }
+
+        // Afficher les face points
+        foreach (Face face in faces)
+        {
+            GameObject obj = Instantiate(facePrefab, face.facePoint, Quaternion.identity);
+            visualizationObjects.Add(obj);
+        }
     }
 
     void ClearVisualization()
@@ -379,44 +385,59 @@ public class CatmullClarkSubdivision : MonoBehaviour
             obj.SetActive(!obj.activeSelf);
         }
     }
-}
 
-public class Vertex
-{
-    public Vector3 position;
-    public List<int> connectedEdges = new List<int>();
-    public List<int> connectedFaces = new List<int>();
-}
-
-public class Edge
-{
-    public int v1, v2; // Indices des sommets
-    public int face1, face2; // Indices des faces
-    public Vector3 edgePoint;
-
-    public override bool Equals(object obj)
+    void DebugStructure(Mesh mesh)
     {
-        if (obj == null || GetType() != obj.GetType())
+        List<Vertex> vertices = new List<Vertex>();
+        List<Edge> edges = new List<Edge>();
+        List<Face> faces = new List<Face>();
+
+        // Initialiser les listes de sommets, arêtes et faces à partir du mesh
+        Initialize(mesh, vertices, edges, faces);
+
+        Debug.Log("Vertices count : " + vertices.Count + ", Edges count :" + edges.Count + " , Faces count : " + faces.Count);
+    }
+}
+
+namespace CatmullUtils
+{
+    public class Vertex
+    {
+        public Vector3 position;
+        public List<int> connectedEdges = new List<int>();
+        public List<int> connectedFaces = new List<int>();
+    }
+
+    public class Edge
+    {
+        public int v1, v2; // Indices des sommets
+        public int face1, face2; // Indices des faces
+        public Vector3 edgePoint;
+
+        public override bool Equals(object obj)
         {
-            return false;
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            Edge other = (Edge)obj;
+            return (v1 == other.v1 && v2 == other.v2) || (v1 == other.v2 && v2 == other.v1);
         }
 
-        Edge other = (Edge)obj;
-        return (v1 == other.v1 && v2 == other.v2) || (v1 == other.v2 && v2 == other.v1);
+        public override int GetHashCode()
+        {
+            int hash = 17;
+            hash = hash * 31 + Mathf.Min(v1, v2).GetHashCode();
+            hash = hash * 31 + Mathf.Max(v1, v2).GetHashCode();
+            return hash;
+        }
     }
 
-    public override int GetHashCode()
+    public class Face
     {
-        int hash = 17;
-        hash = hash * 31 + Mathf.Min(v1, v2).GetHashCode();
-        hash = hash * 31 + Mathf.Max(v1, v2).GetHashCode();
-        return hash;
+        public List<int> vertices = new List<int>(); // Indices des sommets
+        public List<int> edges = new List<int>(); // Indices des arêtes
+        public Vector3 facePoint;
     }
-}
-
-public class Face
-{
-    public List<int> vertices = new List<int>(); // Indices des sommets
-    public List<int> edges = new List<int>(); // Indices des arêtes
-    public Vector3 facePoint;
 }
