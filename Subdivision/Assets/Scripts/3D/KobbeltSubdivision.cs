@@ -152,14 +152,14 @@ public class KobbeltSubdivision : MonoBehaviour
                 Vector3 neighborVertexPosition = vertices[edge.v1].position == vertex.position ? vertices[edge.v2].position : vertices[edge.v1].position;
                 perturbedPosition += neighborVertexPosition;
 
-                if (edge.face2 == -1)
+                if (edge.face2 == -1) // Edge est une bordure
                 {
                     boundaryEdgeCount++;
                 }
             }
-            if (boundaryEdgeCount > 0)
+            
+            if (boundaryEdgeCount > 0) // Ajuster alpha pour les sommets de bordure
             {
-                // Ajuster alpha pour les sommets de bordure
                 alpha = ComputeAlpha(boundaryEdgeCount);
             }
 
