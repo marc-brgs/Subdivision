@@ -278,21 +278,30 @@ public class CatmullClarkSubdivision : MonoBehaviour
         // Afficher les vertex points
         foreach (Vertex vertex in vertices)
         {
-            GameObject obj = Instantiate(vertexPrefab, vertex.position, Quaternion.identity);
+            Vector3 scaledPosition = Vector3.Scale(vertex.position, transform.localScale);
+            scaledPosition += transform.localPosition;
+            scaledPosition = transform.localRotation * scaledPosition;
+            GameObject obj = Instantiate(vertexPrefab, scaledPosition, Quaternion.identity);
             visualizationObjects.Add(obj);
         }
 
-        // Afficher les edge points
+        // Afficher les face points
         foreach (Edge edge in edges)
         {
-            GameObject obj = Instantiate(edgePrefab, edge.edgePoint, Quaternion.identity);
+            Vector3 scaledPosition = Vector3.Scale(edge.edgePoint, transform.localScale);
+            scaledPosition += transform.localPosition;
+            scaledPosition = transform.localRotation * scaledPosition;
+            GameObject obj = Instantiate(facePrefab, scaledPosition, Quaternion.identity);
             visualizationObjects.Add(obj);
         }
 
         // Afficher les face points
         foreach (Face face in faces)
         {
-            GameObject obj = Instantiate(facePrefab, face.facePoint, Quaternion.identity);
+            Vector3 scaledPosition = Vector3.Scale(face.facePoint, transform.localScale);
+            scaledPosition += transform.localPosition;
+            scaledPosition = transform.localRotation * scaledPosition;
+            GameObject obj = Instantiate(facePrefab, scaledPosition, Quaternion.identity);
             visualizationObjects.Add(obj);
         }
     }
