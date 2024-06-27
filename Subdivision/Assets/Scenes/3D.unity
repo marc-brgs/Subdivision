@@ -123,6 +123,115 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &542223433
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 542223438}
+  - component: {fileID: 542223437}
+  - component: {fileID: 542223436}
+  - component: {fileID: 542223435}
+  - component: {fileID: 542223434}
+  - component: {fileID: 542223439}
+  m_Layer: 0
+  m_Name: SubdivisionManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &542223434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542223433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c665de1acf524de439a8729911fd0b36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshFilter: {fileID: 0}
+  vertexPrefab: {fileID: 134592172681078714, guid: fec9b144bc0d984458bf1a427a9c601f, type: 3}
+  facePrefab: {fileID: 134592172681078714, guid: 6e442d55055c61b4197792a8203786a4, type: 3}
+--- !u!114 &542223435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542223433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0748bb84d8e7fba478f1260410aed70f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshFilter: {fileID: 0}
+  subdivisionManager: {fileID: 0}
+--- !u!114 &542223436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542223433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5eb22f7a9c3491447949127b7f54aeb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshFilter: {fileID: 0}
+  subdivisionManager: {fileID: 0}
+--- !u!114 &542223437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542223433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b4fbab464c3e6e46900066c2d072c8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshFilter: {fileID: 1634503748}
+  vertexPrefab: {fileID: 134592172681078714, guid: fec9b144bc0d984458bf1a427a9c601f, type: 3}
+  edgePrefab: {fileID: 134592172681078714, guid: 9cbc12cfc941a0d418178233ed79a2d8, type: 3}
+  facePrefab: {fileID: 134592172681078714, guid: 6e442d55055c61b4197792a8203786a4, type: 3}
+--- !u!4 &542223438
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542223433}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.10391492, y: -0.05294238, z: 0.46138597}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &542223439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542223433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3bbdae09ac936e47b18d07ab15dc8ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshFilter: {fileID: 0}
+  subdivisionManager: {fileID: 0}
 --- !u!114 &563489825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,14 +239,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919132148644647246}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0748bb84d8e7fba478f1260410aed70f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vertexPrefab: {fileID: 134592172681078714, guid: fec9b144bc0d984458bf1a427a9c601f, type: 3}
-  edgePrefab: {fileID: 134592172681078714, guid: 9cbc12cfc941a0d418178233ed79a2d8, type: 3}
-  facePrefab: {fileID: 134592172681078714, guid: 6e442d55055c61b4197792a8203786a4, type: 3}
+  meshFilter: {fileID: 0}
+  subdivisionManager: {fileID: 0}
 --- !u!114 &563489829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,6 +258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c665de1acf524de439a8729911fd0b36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meshFilter: {fileID: 0}
   vertexPrefab: {fileID: 134592172681078714, guid: fec9b144bc0d984458bf1a427a9c601f, type: 3}
   facePrefab: {fileID: 134592172681078714, guid: 6e442d55055c61b4197792a8203786a4, type: 3}
 --- !u!1 &944283669
@@ -263,9 +372,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0748bb84d8e7fba478f1260410aed70f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vertexPrefab: {fileID: 134592172681078714, guid: fec9b144bc0d984458bf1a427a9c601f, type: 3}
-  edgePrefab: {fileID: 134592172681078714, guid: 9cbc12cfc941a0d418178233ed79a2d8, type: 3}
-  facePrefab: {fileID: 134592172681078714, guid: 6e442d55055c61b4197792a8203786a4, type: 3}
+  meshFilter: {fileID: 0}
+  subdivisionManager: {fileID: 0}
 --- !u!1 &1222989298
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,9 +570,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0748bb84d8e7fba478f1260410aed70f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vertexPrefab: {fileID: 134592172681078714, guid: fec9b144bc0d984458bf1a427a9c601f, type: 3}
-  edgePrefab: {fileID: 134592172681078714, guid: 9cbc12cfc941a0d418178233ed79a2d8, type: 3}
-  facePrefab: {fileID: 134592172681078714, guid: 6e442d55055c61b4197792a8203786a4, type: 3}
+  meshFilter: {fileID: 0}
+  subdivisionManager: {fileID: 0}
 --- !u!114 &1586695330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -477,6 +584,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c665de1acf524de439a8729911fd0b36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meshFilter: {fileID: 0}
   vertexPrefab: {fileID: 134592172681078714, guid: fec9b144bc0d984458bf1a427a9c601f, type: 3}
   facePrefab: {fileID: 134592172681078714, guid: 6e442d55055c61b4197792a8203786a4, type: 3}
 --- !u!1 &1634503745
@@ -494,13 +602,14 @@ GameObject:
   - component: {fileID: 1634503750}
   - component: {fileID: 1634503751}
   - component: {fileID: 1634503752}
+  - component: {fileID: 1634503753}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &1634503746
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -591,9 +700,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0748bb84d8e7fba478f1260410aed70f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vertexPrefab: {fileID: 134592172681078714, guid: fec9b144bc0d984458bf1a427a9c601f, type: 3}
-  edgePrefab: {fileID: 134592172681078714, guid: 9cbc12cfc941a0d418178233ed79a2d8, type: 3}
-  facePrefab: {fileID: 134592172681078714, guid: 6e442d55055c61b4197792a8203786a4, type: 3}
+  meshFilter: {fileID: 0}
+  subdivisionManager: {fileID: 0}
 --- !u!114 &1634503751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -606,6 +714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c665de1acf524de439a8729911fd0b36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meshFilter: {fileID: 0}
   vertexPrefab: {fileID: 134592172681078714, guid: fec9b144bc0d984458bf1a427a9c601f, type: 3}
   facePrefab: {fileID: 134592172681078714, guid: 6e442d55055c61b4197792a8203786a4, type: 3}
 --- !u!114 &1634503752
@@ -615,14 +724,27 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1634503745}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5eb22f7a9c3491447949127b7f54aeb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vertexPrefab: {fileID: 134592172681078714, guid: fec9b144bc0d984458bf1a427a9c601f, type: 3}
-  edgePrefab: {fileID: 134592172681078714, guid: 9cbc12cfc941a0d418178233ed79a2d8, type: 3}
-  facePrefab: {fileID: 134592172681078714, guid: 6e442d55055c61b4197792a8203786a4, type: 3}
+  meshFilter: {fileID: 0}
+  subdivisionManager: {fileID: 0}
+--- !u!114 &1634503753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1634503745}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3bbdae09ac936e47b18d07ab15dc8ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshFilter: {fileID: 1634503748}
+  subdivisionManager: {fileID: 0}
 --- !u!1 &1962698281
 GameObject:
   m_ObjectHideFlags: 0
@@ -733,9 +855,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0748bb84d8e7fba478f1260410aed70f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vertexPrefab: {fileID: 134592172681078714, guid: fec9b144bc0d984458bf1a427a9c601f, type: 3}
-  edgePrefab: {fileID: 134592172681078714, guid: 9cbc12cfc941a0d418178233ed79a2d8, type: 3}
-  facePrefab: {fileID: 134592172681078714, guid: 6e442d55055c61b4197792a8203786a4, type: 3}
+  meshFilter: {fileID: 0}
+  subdivisionManager: {fileID: 0}
 --- !u!1 &2052951357
 GameObject:
   m_ObjectHideFlags: 0
@@ -879,13 +1000,14 @@ GameObject:
   - component: {fileID: 563489825}
   - component: {fileID: 563489829}
   - component: {fileID: 3469287836952577106}
+  - component: {fileID: 3469287836952577107}
   m_Layer: 0
   m_Name: Kregger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &1239029618023176407
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1068,9 +1190,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eb22f7a9c3491447949127b7f54aeb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vertexPrefab: {fileID: 134592172681078714, guid: fec9b144bc0d984458bf1a427a9c601f, type: 3}
-  edgePrefab: {fileID: 134592172681078714, guid: 9cbc12cfc941a0d418178233ed79a2d8, type: 3}
-  facePrefab: {fileID: 134592172681078714, guid: 6e442d55055c61b4197792a8203786a4, type: 3}
+  meshFilter: {fileID: 0}
+  subdivisionManager: {fileID: 0}
+--- !u!114 &3469287836952577107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148644647246}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3bbdae09ac936e47b18d07ab15dc8ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshFilter: {fileID: 3469287836952577105}
+  subdivisionManager: {fileID: 0}
 --- !u!23 &3504728351998302464
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1125,9 +1260,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eb22f7a9c3491447949127b7f54aeb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vertexPrefab: {fileID: 134592172681078714, guid: fec9b144bc0d984458bf1a427a9c601f, type: 3}
-  edgePrefab: {fileID: 134592172681078714, guid: 9cbc12cfc941a0d418178233ed79a2d8, type: 3}
-  facePrefab: {fileID: 134592172681078714, guid: 6e442d55055c61b4197792a8203786a4, type: 3}
+  meshFilter: {fileID: 0}
+  subdivisionManager: {fileID: 0}
 --- !u!33 &7407379900698718263
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1148,9 +1282,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0748bb84d8e7fba478f1260410aed70f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vertexPrefab: {fileID: 134592172681078714, guid: fec9b144bc0d984458bf1a427a9c601f, type: 3}
-  edgePrefab: {fileID: 134592172681078714, guid: 9cbc12cfc941a0d418178233ed79a2d8, type: 3}
-  facePrefab: {fileID: 134592172681078714, guid: 6e442d55055c61b4197792a8203786a4, type: 3}
+  meshFilter: {fileID: 0}
+  subdivisionManager: {fileID: 0}
 --- !u!114 &7407379900698718265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1163,5 +1296,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c665de1acf524de439a8729911fd0b36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meshFilter: {fileID: 0}
   vertexPrefab: {fileID: 134592172681078714, guid: fec9b144bc0d984458bf1a427a9c601f, type: 3}
   facePrefab: {fileID: 134592172681078714, guid: 6e442d55055c61b4197792a8203786a4, type: 3}

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using ClassUtils;
 
-public class LoopSubdivision : MonoBehaviour
+public class ButterflySubdivision : MonoBehaviour
 {
     public MeshFilter meshFilter;
     public SubdivisionManager subdivisionManager;
@@ -26,9 +26,6 @@ public class LoopSubdivision : MonoBehaviour
 
         // Calculer les points d'arête
         ComputeEdgePoints(faces, edges, vertices);
-
-        // Calculer les points de sommet
-        ComputeVertexPoints(vertices, edges);
 
         // Reconnecter les points pour former la nouvelle géométrie
         Mesh newMesh = RebuildMesh(vertices, edges, faces);
@@ -74,8 +71,41 @@ public class LoopSubdivision : MonoBehaviour
                     }
                 }
 
+                // Calculer les points d'interpolation supplémentaires
+                Vector3 vOpposite1 = Vector3.zero, vOpposite2 = Vector3.zero;
+                foreach (int i in vertices[edge.v1].connectedFaces)
+                {
+                    if (i != edge.face1 && i != edge.face2)
+                    {
+                        foreach (int vertexIndex in faces[i].vertices)
+                        {
+                            if (vertexIndex != edge.v1 && vertexIndex != edge.v2)
+                            {
+                                vOpposite1 = vertices[vertexIndex].position;
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+                foreach (int i in vertices[edge.v2].connectedFaces)
+                {
+                    if (i != edge.face1 && i != edge.face2)
+                    {
+                        foreach (int vertexIndex in faces[i].vertices)
+                        {
+                            if (vertexIndex != edge.v1 && vertexIndex != edge.v2)
+                            {
+                                vOpposite2 = vertices[vertexIndex].position;
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+
                 // Calculer le point d'arête
-                edgePoint = (3.0f / 8.0f) * (v1 + v2) + (1.0f / 8.0f) * (vLeft + vRight);
+                edgePoint = (v1 + v2) * 0.5f + (vLeft + vRight) * 0.125f - (vOpposite1 + vOpposite2) * 0.0625f;
             }
             else
             {
@@ -84,31 +114,6 @@ public class LoopSubdivision : MonoBehaviour
             }
 
             edge.edgePoint = edgePoint;
-        }
-    }
-
-    void ComputeVertexPoints(List<Vertex> vertices, List<Edge> edges)
-    {
-        foreach (Vertex vertex in vertices)
-        {
-            Vector3 neighborSum = Vector3.zero;
-            int n = vertex.connectedEdges.Count;
-
-            foreach (int edgeIndex in vertex.connectedEdges)
-            {
-                Edge edge = edges[edgeIndex];
-                int neighborIndex = edge.v1 == vertices.IndexOf(vertex) ? edge.v2 : edge.v1;
-                neighborSum += vertices[neighborIndex].position;
-            }
-
-            /*float alpha = 3 / 16;
-            if(n > 3)
-            {
-                alpha = (1/n) * ((5/8) - Mathf.Pow((3/8) + (1/4) * Mathf.Cos(2*Mathf.PI/n), 2));
-            }*/
-            float alpha = 3.0f / (8.0f * n);
-            Vector3 vertexPoint = (1 - n * alpha) * vertex.position + alpha * neighborSum;
-            vertex.position = vertexPoint;
         }
     }
 
@@ -175,5 +180,47 @@ public class LoopSubdivision : MonoBehaviour
         newMesh.RecalculateNormals();
 
         return newMesh;
+    }
+}
+
+namespace ButteflyUtils
+{
+    public class Vertex
+    {
+        public Vector3 position;
+        public List<int> connectedEdges = new List<int>();
+        public List<int> connectedFaces = new List<int>();
+    }
+
+    public class Edge
+    {
+        public int v1, v2; // Indices des sommets
+        public int face1, face2; // Indices des faces
+        public Vector3 edgePoint;
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            Edge other = (Edge)obj;
+            return (v1 == other.v1 && v2 == other.v2) || (v1 == other.v2 && v2 == other.v1);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 17;
+            hash = hash * 31 + Mathf.Min(v1, v2).GetHashCode();
+            hash = hash * 31 + Mathf.Max(v1, v2).GetHashCode();
+            return hash;
+        }
+    }
+
+    public class Face
+    {
+        public List<int> vertices = new List<int>(); // Indices des sommets
+        public List<int> edges = new List<int>(); // Indices des arêtes
     }
 }
