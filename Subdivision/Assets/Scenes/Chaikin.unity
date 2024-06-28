@@ -403,6 +403,7 @@ GameObject:
   m_Component:
   - component: {fileID: 162065718}
   - component: {fileID: 162065717}
+  - component: {fileID: 162065719}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -425,11 +426,6 @@ MonoBehaviour:
   pointPrefab: {fileID: 7157594577983486673, guid: 63a91bbe7e571f14c837f7af2762cb44, type: 3}
   pointParent: {fileID: 784595845}
   lineParent: {fileID: 1919183339}
-  btnBackground: {fileID: 837868723}
-  chaikinPrefab: {fileID: 7157594577983486673, guid: 418d3c4f71caeb64b85b55d70d963ff9, type: 3}
-  chaikinParent: {fileID: 2015629611}
-  loop: 0
-  iterations: 1
 --- !u!4 &162065718
 Transform:
   m_ObjectHideFlags: 0
@@ -445,6 +441,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &162065719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 162065716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a7ef6e64e8858945a9adb5f58771027, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chaikinPrefab: {fileID: 7157594577983486673, guid: 418d3c4f71caeb64b85b55d70d963ff9, type: 3}
+  chaikinParent: {fileID: 2015629611}
+  loop: 0
+  iterations: 1
+  u: 0.25
+  v: 0.75
 --- !u!1 &230547936
 GameObject:
   m_ObjectHideFlags: 0
