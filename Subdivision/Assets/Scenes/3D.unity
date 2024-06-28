@@ -574,6 +574,7 @@ MonoBehaviour:
   - {fileID: 919132148644647246}
   - {fileID: 3144558923621005525}
   - {fileID: 11448186767653169}
+  - {fileID: 1586695324}
   meshFilter: {fileID: 0}
   visualisePoints: 1
   vertexPrefab: {fileID: 134592172681078714, guid: fec9b144bc0d984458bf1a427a9c601f, type: 3}
@@ -587,7 +588,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 542223433}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.10391492, y: -0.05294238, z: 0.46138597}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2991,9 +2992,9 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 939a78d58e4a6a94e8e4de0bc1ee917b, type: 2}
-  - {fileID: 2100000, guid: 939a78d58e4a6a94e8e4de0bc1ee917b, type: 2}
-  - {fileID: 2100000, guid: 939a78d58e4a6a94e8e4de0bc1ee917b, type: 2}
+  - {fileID: 2100000, guid: 08bb05d37f4142b4e875eb7a32a84726, type: 2}
+  - {fileID: 2100000, guid: a6ffd6148ee130c4a990ef295210664e, type: 2}
+  - {fileID: 2100000, guid: c8070a98b22691b4c8294898b1801962, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

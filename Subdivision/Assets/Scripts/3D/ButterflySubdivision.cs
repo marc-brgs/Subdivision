@@ -57,9 +57,11 @@ public class ButterflySubdivision : MonoBehaviour
                 // Trouver vLeft dans face1
                 foreach (int vertexIndex in face1.vertices)
                 {
-                    if (vertexIndex != edge.v1 && vertexIndex != edge.v2)
+                    Vector3 vertexPosition = vertices[vertexIndex].position;
+
+                    if (vertexPosition != v1 && vertexPosition != v2)
                     {
-                        vLeft = vertices[vertexIndex].position;
+                        vLeft = vertexPosition;
                         break;
                     }
                 }
@@ -67,31 +69,40 @@ public class ButterflySubdivision : MonoBehaviour
                 // Trouver vRight dans face2
                 foreach (int vertexIndex in face2.vertices)
                 {
-                    if (vertexIndex != edge.v1 && vertexIndex != edge.v2)
+                    Vector3 vertexPosition = vertices[vertexIndex].position;
+
+                    if (vertexPosition != v1 && vertexPosition != v2)
                     {
-                        vRight = vertices[vertexIndex].position;
+                        vRight = vertexPosition;
                         break;
                     }
                 }
 
-                // Calculer les points d'interpolation supplémentaires
-                Vector3 vOpposite1 = Vector3.zero, vOpposite2 = Vector3.zero;
-                bool foundOpposite1 = false, foundOpposite2 = false;
+                // Trouver les points opposés selon les nouvelles règles
+
+                Vector3 vOpposite1 = Vector3.zero, vOpposite2 = Vector3.zero, vOpposite3 = Vector3.zero, vOpposite4 = Vector3.zero;
+                bool foundOpposite1 = false, foundOpposite2 = false, foundOpposite3 = false, foundOpposite4 = false;
 
                 // Trouver vOpposite1
                 foreach (int i in vertices[edge.v1].connectedFaces)
                 {
                     if (i != edge.face1 && i != edge.face2)
                     {
-                        foreach (int vertexIndex in faces[i].vertices)
+                        Face oppositeFace = faces[i];
+
+                        // Chercher le sommet de oppositeFace qui n'est pas edge.v1, edge.v2 ou vRight
+                        foreach (int vertexIndex in oppositeFace.vertices)
                         {
-                            if (vertexIndex != edge.v1 && vertexIndex != edge.v2)
+                            Vector3 vertexPosition = vertices[vertexIndex].position;
+
+                            if (vertexPosition != v1 && vertexPosition != v2 && vertexPosition != vRight)
                             {
-                                vOpposite1 = vertices[vertexIndex].position;
+                                vOpposite1 = vertexPosition;
                                 foundOpposite1 = true;
                                 break;
                             }
                         }
+
                         if (foundOpposite1)
                             break;
                     }
@@ -102,22 +113,78 @@ public class ButterflySubdivision : MonoBehaviour
                 {
                     if (i != edge.face1 && i != edge.face2)
                     {
-                        foreach (int vertexIndex in faces[i].vertices)
+                        Face oppositeFace = faces[i];
+
+                        // Chercher le sommet de oppositeFace qui n'est pas edge.v1, edge.v2 ou vRight
+                        foreach (int vertexIndex in oppositeFace.vertices)
                         {
-                            if (vertexIndex != edge.v1 && vertexIndex != edge.v2)
+                            Vector3 vertexPosition = vertices[vertexIndex].position;
+
+                            if (vertexPosition != v1 && vertexPosition != v2 && vertexPosition != vRight)
                             {
-                                vOpposite2 = vertices[vertexIndex].position;
+                                vOpposite2 = vertexPosition;
                                 foundOpposite2 = true;
                                 break;
                             }
                         }
+
                         if (foundOpposite2)
                             break;
                     }
                 }
 
+                // Trouver vOpposite3
+                foreach (int i in vertices[edge.v1].connectedFaces)
+                {
+                    if (i != edge.face1 && i != edge.face2)
+                    {
+                        Face oppositeFace = faces[i];
+
+                        // Chercher le sommet de oppositeFace qui n'est pas edge.v1, edge.v2 ou vLeft
+                        foreach (int vertexIndex in oppositeFace.vertices)
+                        {
+                            Vector3 vertexPosition = vertices[vertexIndex].position;
+
+                            if (vertexPosition != v1 && vertexPosition != v2 && vertexPosition != vLeft)
+                            {
+                                vOpposite3 = vertexPosition;
+                                foundOpposite3 = true;
+                                break;
+                            }
+                        }
+
+                        if (foundOpposite3)
+                            break;
+                    }
+                }
+
+                // Trouver vOpposite4
+                foreach (int i in vertices[edge.v2].connectedFaces)
+                {
+                    if (i != edge.face1 && i != edge.face2)
+                    {
+                        Face oppositeFace = faces[i];
+
+                        // Chercher le sommet de oppositeFace qui n'est pas edge.v1, edge.v2 ou vLeft
+                        foreach (int vertexIndex in oppositeFace.vertices)
+                        {
+                            Vector3 vertexPosition = vertices[vertexIndex].position;
+
+                            if (vertexPosition != v1 && vertexPosition != v2 && vertexPosition != vLeft)
+                            {
+                                vOpposite4 = vertexPosition;
+                                foundOpposite4 = true;
+                                break;
+                            }
+                        }
+
+                        if (foundOpposite4)
+                            break;
+                    }
+                }
+
                 // Calculer le point d'arête selon l'algorithme Butterfly
-                edgePoint = (1/2f) * (v1 + v2) + (1/8f) * (vLeft + vRight) - (1/16f) * (vOpposite1 + vOpposite2);
+                edgePoint = (1 / 2f) * (v1 + v2) + (1 / 8f) * (vLeft + vRight) - (1 / 16f) * (vOpposite1 + vOpposite2 + vOpposite3 + vOpposite4);
             }
             else
             {
@@ -128,6 +195,8 @@ public class ButterflySubdivision : MonoBehaviour
             edge.edgePoint = edgePoint;
         }
     }
+
+
 
     Mesh RebuildMesh(List<Vertex> vertices, List<Edge> edges, List<Face> faces)
     {
