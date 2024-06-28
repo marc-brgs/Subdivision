@@ -28,10 +28,9 @@ public class Chaikin : MonoBehaviour
             }
         }
     }
-
-    [SerializeField]
+    
     [Range(0,5)]
-    private int iterations = 3;
+    public int iterations = 3;
     public int Iterations
     {
         get => iterations;
@@ -111,13 +110,16 @@ public class Chaikin : MonoBehaviour
         {
             return;
         }
-
+        
         StartCoroutine(DeferredUpdateLines());
     }
     
     private IEnumerator DeferredUpdateLines()
     {
         yield return new WaitForEndOfFrame();
+        
+        if (GameManager.Instance.coons) yield break;
+        
         UpdateLines();
     }
     
@@ -178,6 +180,8 @@ public class Chaikin : MonoBehaviour
 
     public void UpdateLines()
     {
+        Debug.Log("Chaikin::UpdateLines");
+        
         // Delete lines
         foreach (var l in GameManager.Instance.linesGO)
         {

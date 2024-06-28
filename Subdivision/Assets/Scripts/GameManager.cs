@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using DelaunayVoronoi;
 
 public class GameManager : MonoBehaviour
@@ -17,6 +16,8 @@ public class GameManager : MonoBehaviour
     [Header("Miscellaneous")]
     
     public static GameManager Instance;
+
+    public bool coons;
     
     #endregion
     
@@ -43,6 +44,8 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (coons) return;
+        
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetButton("Fire1"))
         {
             var screenPosition = Input.mousePosition;
@@ -69,7 +72,6 @@ public class GameManager : MonoBehaviour
             }
             
             Chaikin.Instance.UpdateLines();
-            //UpdateRealtime();
         }
         else if (Input.GetMouseButtonDown(0))
         {
@@ -78,9 +80,8 @@ public class GameManager : MonoBehaviour
             var worldPosition = Camera.main!.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 0f));
             pointsGO.Add(CreatePoint(worldPosition));
             allPoints.Add(new Point(worldPosition.x, worldPosition.y));
- 
+            
             Chaikin.Instance.UpdateLines();
-            //UpdateRealtime();
         }
 
         if (Input.GetMouseButtonDown(1))
@@ -109,7 +110,7 @@ public class GameManager : MonoBehaviour
                 pointsGO.RemoveAt(indexToRemove);
                 allPoints.RemoveAt(indexToRemove);
             }
-
+            
             Chaikin.Instance.UpdateLines();
         }
 

@@ -158,7 +158,7 @@ Camera:
   m_GameObject: {fileID: 278241792}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -432,6 +432,7 @@ MonoBehaviour:
   pointPrefab: {fileID: 7157594577983486673, guid: 63a91bbe7e571f14c837f7af2762cb44, type: 3}
   pointParent: {fileID: 2130553579}
   lineParent: {fileID: 1635137243}
+  coons: 1
 --- !u!4 &626726755
 Transform:
   m_ObjectHideFlags: 0
