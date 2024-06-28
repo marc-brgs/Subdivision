@@ -7,6 +7,7 @@ public class Coons : MonoBehaviour
     #region Public Fields
 
     public GameObject coonsParent;
+    public int resolution = 10;
     
     public static Coons Instance;
 
@@ -129,7 +130,7 @@ public class Coons : MonoBehaviour
             Q1 = Chaikin.Instance.ChaikinSubdivision(Q1);
         }
 
-        GenerateCoonsSurface(P0, P1, Q0, Q1, 10);
+        GenerateCoonsSurface(P0, P1, Q0, Q1, resolution);
     }
     
     private void GenerateCoonsSurface(List<Point> P0, List<Point> P1, List<Point> Q0, List<Point> Q1, int resolution)
@@ -196,7 +197,6 @@ public class Coons : MonoBehaviour
     
     private void CreateSimpleSurface(Point p0, Point p1, Point p2, Point p3)
     {
-        // Créer une liste de vecteurs pour les sommets
         List<Vector3> vertices = new List<Vector3>
         {
             p0.GetVector(),
@@ -205,14 +205,12 @@ public class Coons : MonoBehaviour
             p3.GetVector()
         };
 
-        // Créer une liste d'indices pour les triangles
         List<int> indices = new List<int>
         {
-            0, 1, 2, // Premier triangle
-            0, 2, 3  // Deuxième triangle
+            0, 1, 2,
+            0, 2, 3
         };
 
-        // Créer un nouveau mesh
         Mesh mesh = new Mesh
         {
             vertices = vertices.ToArray(),
@@ -220,7 +218,6 @@ public class Coons : MonoBehaviour
         };
         mesh.RecalculateNormals();
 
-        // Créer un GameObject pour afficher le mesh
         GameObject simpleSurface = new GameObject("SimpleSurface");
         MeshFilter meshFilter = simpleSurface.AddComponent<MeshFilter>();
         MeshRenderer meshRenderer = simpleSurface.AddComponent<MeshRenderer>();
@@ -231,13 +228,11 @@ public class Coons : MonoBehaviour
     
     private void CreateSimpleSurface(Point p0, Point p1, Point p2, Point p3, int resolution)
     {
-        // Interpoler linéairement les courbes de bord
         List<Point> P0 = InterpolatePoints(p0, p1, resolution);
         List<Point> P1 = InterpolatePoints(p3, p2, resolution);
         List<Point> Q0 = InterpolatePoints(p0, p3, resolution);
         List<Point> Q1 = InterpolatePoints(p1, p2, resolution);
 
-        // Générer la surface de Coons
         GenerateCoonsSurface(P0, P1, Q0, Q1, resolution);
     }
     

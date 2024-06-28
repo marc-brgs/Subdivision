@@ -398,7 +398,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eec86dbaca4f6040806e6720b0edf8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  iterations: 3
+  coonsParent: {fileID: 1792709032}
+  resolution: 80
 --- !u!114 &626726753
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -414,7 +415,7 @@ MonoBehaviour:
   chaikinPrefab: {fileID: 7157594577983486673, guid: 418d3c4f71caeb64b85b55d70d963ff9, type: 3}
   chaikinParent: {fileID: 549852268}
   loop: 0
-  iterations: 1
+  iterations: 4
   u: 0.284
   v: 0.661
 --- !u!114 &626726754
