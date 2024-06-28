@@ -7,6 +7,7 @@ public class SubdivisionManager : MonoBehaviour
 {
     public List<GameObject> objects;
     public MeshFilter meshFilter;
+    public bool visualisePoints = true;
     public GameObject vertexPrefab;
     public GameObject edgePrefab;
     public GameObject facePrefab;
@@ -18,36 +19,59 @@ public class SubdivisionManager : MonoBehaviour
     private ButterflySubdivision butterflySubdivision;
     private List<GameObject> visualizationObjects = new List<GameObject>();
 
+    void Awake()
+    {
+        meshFilter = objects[0].GetComponent<MeshFilter>();
+    }
+
     void Start()
     {
         loopSubdivision = GetComponent<LoopSubdivision>();
         catmullSubdivision = GetComponent<CatmullClarkSubdivision>();
         kobbeltSubdivision = GetComponent<KobbeltSubdivision>();
         butterflySubdivision = GetComponent<ButterflySubdivision>();
+
         originalMesh = Instantiate(meshFilter.mesh);
+        ActivateMeshFilter(0);
+
+        DebugStructure(meshFilter.mesh);
     }
 
     void Update()
     {
+        for (int i = 0; i < objects.Count; i++)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i)) // Exemple : Touche '1' correspond à l'indice 0
+            {
+                meshFilter.mesh = originalMesh; // Reset
+                ActivateMeshFilter(i);
+                ClearVisualization();
+                break; // Sortir de la boucle une fois le changement effectué
+            }
+        }
+
         if (Input.GetKeyDown(KeyCode.A)) // Loop
         {
-            loopSubdivision.Subdivide(meshFilter.mesh);
+            Debug.Log("Loop");
+            loopSubdivision.Subdivide(meshFilter.mesh, visualisePoints);
         }
 
         if (Input.GetKeyDown(KeyCode.Z)) // Catmull
         {
-            // Appel à la subdivision 2
-            catmullSubdivision.Subdivide(meshFilter.mesh);
+            Debug.Log("Catmull-Clark");
+            catmullSubdivision.Subdivide(meshFilter.mesh, visualisePoints);
         }
 
         if (Input.GetKeyDown(KeyCode.E)) // Kobbelt
         {
-            kobbeltSubdivision.Subdivide(meshFilter.mesh);
+            Debug.Log("Kobbelt");
+            kobbeltSubdivision.Subdivide(meshFilter.mesh, visualisePoints);
         }
 
         if (Input.GetKeyDown(KeyCode.Q)) // Butterfly
         {
-            butterflySubdivision.Subdivide(meshFilter.mesh);
+            Debug.Log("Butterfly");
+            butterflySubdivision.Subdivide(meshFilter.mesh, visualisePoints);
         }
 
         if (Input.GetKeyDown(KeyCode.V))
@@ -62,6 +86,32 @@ public class SubdivisionManager : MonoBehaviour
             meshFilter.mesh = Instantiate(originalMesh);
             ClearVisualization();
         }
+    }
+
+    void ActivateMeshFilter(int index)
+    {
+        // Désactiver tous les objets sauf celui correspondant à l'index
+        for (int i = 0; i < objects.Count; i++)
+        {
+            if (i == index)
+            {
+                objects[i].SetActive(true);
+            }
+            else
+            {
+                objects[i].SetActive(false);
+            }
+        }
+
+        // Mettre à jour l'index du meshFilter courant
+        meshFilter = objects[index].GetComponent<MeshFilter>();
+        originalMesh = meshFilter.mesh;
+
+        // Mettre à jour le meshFilter des subdivisions
+        loopSubdivision.meshFilter = meshFilter;
+        catmullSubdivision.meshFilter = meshFilter;
+        kobbeltSubdivision.meshFilter = meshFilter;
+        butterflySubdivision.meshFilter = meshFilter;
     }
 
     public void Initialize(Mesh mesh, List<Vertex> vertices, List<Edge> edges, List<Face> faces)
@@ -153,11 +203,10 @@ public class SubdivisionManager : MonoBehaviour
                 Vector3 scaledPosition = Vector3.Scale(edge.edgePoint, meshTransform.localScale);
                 scaledPosition += meshTransform.localPosition;
                 scaledPosition = meshTransform.localRotation * scaledPosition;
-                GameObject obj = Instantiate(facePrefab, scaledPosition, Quaternion.identity);
+                GameObject obj = Instantiate(edgePrefab, scaledPosition, Quaternion.identity);
                 visualizationObjects.Add(obj);
             }
         }
-
 
         // Afficher les face points
         if (faces != null)

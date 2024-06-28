@@ -6,16 +6,15 @@ using ClassUtils;
 public class LoopSubdivision : MonoBehaviour
 {
     public MeshFilter meshFilter;
-    public SubdivisionManager subdivisionManager;
+    private SubdivisionManager subdivisionManager;
 
     void Start()
     {
         subdivisionManager = GetComponent<SubdivisionManager>();
         meshFilter = subdivisionManager.meshFilter;
-        subdivisionManager.DebugStructure(meshFilter.mesh);
     }
 
-    public void Subdivide(Mesh mesh, bool visualizeOnly = false)
+    public void Subdivide(Mesh mesh, bool visualisePoints = false)
     {
         List<Vertex> vertices = new List<Vertex>();
         List<Edge> edges = new List<Edge>();
@@ -35,7 +34,10 @@ public class LoopSubdivision : MonoBehaviour
         meshFilter.mesh = newMesh;
 
         subdivisionManager.DebugStructure(newMesh);
-        subdivisionManager.VisualizePoints(vertices, edges);
+        if (visualisePoints)
+        {
+            subdivisionManager.VisualizePoints(vertices, edges);
+        }
     }
 
     void ComputeEdgePoints(List<Face> faces, List<Edge> edges, List<Vertex> vertices)
@@ -101,12 +103,17 @@ public class LoopSubdivision : MonoBehaviour
                 neighborSum += vertices[neighborIndex].position;
             }
 
-            /*float alpha = 3 / 16;
-            if(n > 3)
+            float alpha;
+            if (n == 3)
             {
-                alpha = (1/n) * ((5/8) - Mathf.Pow((3/8) + (1/4) * Mathf.Cos(2*Mathf.PI/n), 2));
-            }*/
-            float alpha = 3.0f / (8.0f * n);
+                alpha = 3.0f / 16.0f;
+            }
+            else
+            {
+                float theta = 2.0f * Mathf.PI / n;
+                alpha = (1.0f / n) * (5.0f / 8.0f - Mathf.Pow((3.0f / 8.0f) + (1.0f / 4.0f) * Mathf.Cos(theta), 2));
+            }
+            //float alpha = 3.0f / (8.0f * n); // Proposed by Warren
             Vector3 vertexPoint = (1 - n * alpha) * vertex.position + alpha * neighborSum;
             vertex.position = vertexPoint;
         }

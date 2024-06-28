@@ -6,16 +6,15 @@ using ClassUtils;
 public class KobbeltSubdivision : MonoBehaviour
 {
     public MeshFilter meshFilter;
-    public SubdivisionManager subdivisionManager;
+    private SubdivisionManager subdivisionManager;
 
     void Start()
     {
         subdivisionManager = GetComponent<SubdivisionManager>();
         meshFilter = subdivisionManager.meshFilter;
-        subdivisionManager.DebugStructure(meshFilter.mesh);
     }
 
-    public void Subdivide(Mesh mesh, bool visualizeOnly = false)
+    public void Subdivide(Mesh mesh, bool visualisePoints = false)
     {
         List<Vertex> vertices = new List<Vertex>();
         List<Edge> edges = new List<Edge>();
@@ -35,7 +34,11 @@ public class KobbeltSubdivision : MonoBehaviour
         meshFilter.mesh = newMesh;
 
         subdivisionManager.DebugStructure(meshFilter.mesh);
-        subdivisionManager.VisualizePoints(vertices, null, faces);
+        if(visualisePoints) 
+        {
+            subdivisionManager.VisualizePoints(vertices, null, faces);
+        }
+        
     }
 
     void ComputeFacePoints(List<Face> faces, List<Vertex> vertices)

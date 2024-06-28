@@ -6,16 +6,15 @@ using ClassUtils;
 public class CatmullClarkSubdivision : MonoBehaviour
 {
     public MeshFilter meshFilter;
-    public SubdivisionManager subdivisionManager;
+    private SubdivisionManager subdivisionManager;
 
     void Start()
     {
         subdivisionManager = GetComponent<SubdivisionManager>();
         meshFilter = subdivisionManager.meshFilter;
-        subdivisionManager.DebugStructure(meshFilter.mesh);
     }
 
-    public void Subdivide(Mesh mesh, bool visualizeOnly = false)
+    public void Subdivide(Mesh mesh, bool visualisePoints=false)
     {
         List<Vertex> vertices = new List<Vertex>();
         List<Edge> edges = new List<Edge>();
@@ -38,7 +37,10 @@ public class CatmullClarkSubdivision : MonoBehaviour
         meshFilter.mesh = newMesh;
 
         subdivisionManager.DebugStructure(newMesh);
-        subdivisionManager.VisualizePoints(vertices, edges, faces);
+        if (visualisePoints)
+        {
+            subdivisionManager.VisualizePoints(vertices, edges, faces);
+        }
     }
 
     // OK : centroid
